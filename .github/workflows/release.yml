@@ -74,9 +74,9 @@ jobs:
           echo "ndk.dir=${ANDROID_HOME}/ndk/25.0.8775105" >> local.properties
           ./run init action gradle
           ./gradlew app:assemblePlay
-          APK=$(find app/build/outputs/apk -name '*arm64-v8a*.apk')
-          APK=$(dirname $APK)
-          echo "APK=$APK" >> $GITHUB_ENV
+          mkdir apks
+          find artifacts -name "*.apk" -exec cp {} apks \;
+          echo "APK=apks" >> $GITHUB_ENV
       - uses: actions/upload-artifact@v4
         with:
           name: APKs
@@ -114,9 +114,9 @@ jobs:
           export LOCAL_PROPERTIES="${{ secrets.LOCAL_PROPERTIES }}"
           ./run init action gradle
           ./gradlew app:assembleOssRelease
-          mkdir apks
-          find artifacts -name "*.apk" -exec cp {} apks \;
-          echo "APK=apks" >> $GITHUB_ENV
+          APK=$(find app/build/outputs/apk -name '*arm64-v8a*.apk')
+          APK=$(dirname $APK)
+          echo "APK=$APK" >> $GITHUB_ENV
       - uses: actions/upload-artifact@v4
         with:
           name: APKs
