@@ -75,7 +75,7 @@ jobs:
           ./run init action gradle
           ./gradlew app:assemblePlay
           mkdir apks
-          find artifacts -name "*.apk" -exec cp {} apks \;
+          find app/build/outputs/apk -name "*.apk" -exec cp {} apks \;
           echo "APK=apks" >> $GITHUB_ENV
       - uses: actions/upload-artifact@v4
         with:
