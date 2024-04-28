@@ -6,16 +6,16 @@ on:
         description: 'Release Tag'
         required: true
       build:
-        description: 'Build: If want ignore'
+        description: 'Build: If want run'
         required: false
       upload:
-        description: 'Upload: If want ignore'
+        description: 'Upload: If want run'
         required: false
       publish:
-        description: 'Publish: If want ignore'
+        description: 'Publish: If want run'
         required: false
       play:
-        description: 'Play: If want ignore'
+        description: 'Play: If want run'
         required: false
 jobs:
   libcore:
@@ -83,7 +83,7 @@ jobs:
           path: ${{ env.APK }}
   build:
     name: Build OSS APK
-    if: github.event.inputs.build != 'y'
+    if: github.event.inputs.build == 'y'
     runs-on: ubuntu-latest
     needs:
       - libcore
@@ -123,7 +123,7 @@ jobs:
           path: ${{ env.APK }}
   publish:
     name: Publish Release
-    if: github.event.inputs.publish != 'y'
+    if: github.event.inputs.publish == 'y'
     runs-on: ubuntu-latest
     needs: build
     steps:
@@ -144,7 +144,7 @@ jobs:
           ./ghr -delete -t "${{ github.token }}" -n "${{ github.event.inputs.tag }}" "${{ github.event.inputs.tag }}" apks
   upload:
     name: Upload Release
-    if: github.event.inputs.upload != 'y'
+    if: github.event.inputs.upload == 'y'
     runs-on: ubuntu-latest
     needs: build
     steps:
@@ -174,7 +174,7 @@ jobs:
           upload apks/*
   play:
     name: Build Play Bundle
-    if: github.event.inputs.play != 'y'
+    if: github.event.inputs.play == 'y'
     runs-on: ubuntu-latest
     needs:
       - libcore
