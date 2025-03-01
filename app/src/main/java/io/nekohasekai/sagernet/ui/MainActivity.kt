@@ -37,7 +37,6 @@ import io.nekohasekai.sagernet.group.GroupUpdater
 import io.nekohasekai.sagernet.ktx.*
 import io.nekohasekai.sagernet.widget.ListHolderListener
 import moe.matsuri.nb4a.utils.Util
-import java.util.*
 
 class MainActivity : ThemedActivity(),
     SagerConnection.Callback,
@@ -333,7 +332,7 @@ class MainActivity : ThemedActivity(),
 
             R.id.nav_about -> displayFragment(AboutFragment())
             R.id.nav_tuiguang -> {
-                launchCustomTab("https://matsuricom.pages.dev/")
+                launchCustomTab("https://neko-box.pages.dev/喵")
                 return false
             }
 
