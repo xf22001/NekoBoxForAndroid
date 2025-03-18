@@ -60,7 +60,9 @@ func VersionBox() string {
 func ResetAllConnections(system bool) {
 	if system {
 		conntrack.Close()
-		log.Println("[Debug] Reset system connections done")
+		log.Println("Reset system connections done")
+	} else {
+		log.Println("TODO: Reset user connections")
 	}
 }
 
@@ -184,7 +186,7 @@ func (b *BoxInstance) SetV2rayStats(outbounds string) {
 		Enabled:   true,
 		Outbounds: strings.Split(outbounds, "\n"),
 	})
-	b.Box.Router().SetTracker(b.v2api.StatsService())
+	b.Box.Router().SetNekoTracker(b.v2api.StatsService())
 }
 
 func (b *BoxInstance) QueryStats(tag, direct string) int64 {
