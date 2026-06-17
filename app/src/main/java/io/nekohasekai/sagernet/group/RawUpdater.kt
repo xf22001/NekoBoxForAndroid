@@ -58,6 +58,7 @@ object RawUpdater : GroupUpdater() {
 
             val response = Libcore.newHttpClient().apply {
                 trySocks5(DataStore.mixedPort)
+                tryH3Direct()
                 when (DataStore.appTLSVersion) {
                     "1.3" -> restrictedTLS()
                 }
@@ -73,6 +74,17 @@ object RawUpdater : GroupUpdater() {
 
             subscription.subscriptionUserinfo =
                 Util.getStringBox(response.getHeader("Subscription-Userinfo"))
+
+            // 修改默认名字
+            if (proxyGroup.name?.startsWith("Subscription #") == true) {
+                var remoteName = Util.getStringBox(response.getHeader("content-disposition"))
+                if (remoteName.isNotBlank()) {
+                    remoteName = Util.decodeFilename(remoteName)
+                    if (remoteName.isNotBlank()) {
+                        proxyGroup.name = remoteName
+                    }
+                }
+            }
         }
 
         val proxiesMap = LinkedHashMap<String, AbstractBean>()
@@ -149,7 +161,9 @@ object RawUpdater : GroupUpdater() {
             if (toReplace.contains(name)) {
                 val entity = toReplace[name]!!
                 val existsBean = entity.requireBean()
-                existsBean.applyFeatureSettings(bean)
+                // 更新订阅，保留自定义覆写设置
+                bean.customOutboundJson = existsBean.customOutboundJson
+                bean.customConfigJson = existsBean.customConfigJson
                 when {
                     existsBean != bean -> {
                         changed++
@@ -460,6 +474,15 @@ object RawUpdater : GroupUpdater() {
 
                                                 "padding" -> bean.muxPadding =
                                                     smuxOpt.value.toString() == "true"
+                                            }
+                                        }
+                                    }
+
+                                    "ech-opts" -> (opt.value as? Map<String, Any?>)?.also {
+                                        for (echOpt in it) {
+                                            when (echOpt.key) {
+                                                "enable" -> bean.enableECH =
+                                                    echOpt.value.toString() == "true"
                                             }
                                         }
                                     }

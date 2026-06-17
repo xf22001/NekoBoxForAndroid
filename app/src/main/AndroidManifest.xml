@@ -22,7 +22,9 @@
 
     <uses-permission
         android:name="android.permission.QUERY_ALL_PACKAGES"
-        tools:ignore="QueryAllPackagesPermission" />
+        tools:ignore="PackageVisibilityPolicy" />
+    <uses-permission android:name="com.android.permission.GET_INSTALLED_APPS" />
+
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
 
@@ -219,6 +221,24 @@
                 <action android:name="android.intent.action.CREATE_SHORTCUT" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="io.nekohasekai.sagernet.ui.QuickEnableShortcut"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:label="@string/quick_enable"
+            android:launchMode="singleTask"
+            android:process=":bg"
+            android:taskAffinity=""
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity
+            android:name="io.nekohasekai.sagernet.ui.QuickDisableShortcut"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:label="@string/quick_disable"
+            android:launchMode="singleTask"
+            android:process=":bg"
+            android:taskAffinity=""
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
             android:name="io.nekohasekai.sagernet.ui.AppManagerActivity"
             android:configChanges="uiMode"
